@@ -23,7 +23,7 @@ body{
   font-family: "Open Sans", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 a{
@@ -269,4 +269,34 @@ hi{
    100% {
     transform: translateX(-50%);
    }
+}
+
+h2{
+    font-size: 50px;
+    line-height: 1;
+    margin-bottom: 10px;
+    text-align: center;
+    color: var(--base-800);
+    padding: 20px;
+    small{
+        display: block;
+        font-weight: 100;
+        font-size: 0.5em;
+        color: var(--base);
+    }
+}
+
+.skills{
+    .holder-blue{
+        background-color: var(--blue-100);
+        border-radius: 30px;
+        padding: 30px;
+        display: flex;
+        .left-column{
+            flex: 1;
+        }
+        .right-column{
+            flex: 1;
+        }
+    }
 }
