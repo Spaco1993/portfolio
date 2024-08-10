@@ -9,40 +9,41 @@ const chatlog = document.querySelector("#chat-log");
 
 
 let userMessage;
-const API_KEY = "";
+const API_KEY = "AIzaSyDr4B9nKMvyatkq_bgWS9jkP-dnSCv3rIs";
 
 
 const createChatLi = (message, className) => {
     // create a chat <li> element with passed message and className
     const chatLi = document.createElement("li");
     chatLi.classList.add("chat", className);
-    let chatContent = className === "outgoing" ? `<div>${message}</div>` : `<span class="avatar bot">AI</span><div>${message}</div>`
+    let chatContent = className === "outgoing" ? `<div></div>` : `<span class="avatar bot">AI</span><div></div>`;
     chatLi.innerHTML = chatContent;
+    chatLi.querySelector("div").textContent = message;
     return chatLi;
 }
 
 const generateResponse = (incomingChatLi) => {
-    const API_URL = "https://api.openai.com/v1/chat/completions";
-    const messageElement = incomingChatLi.querySelector("p");
+    const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+    const messageElement = incomingChatLi.querySelector("div");
 
     const requestOptions = {
         method: "POST",
         headers: {
-           "Content-Type":  "application/json",
-           "Authorization": `Bearer ${API_KEY}`
-        },
+           "Content-Type":  "application/json"},
         body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{role: "user", content: userMessage}]
-        })
-    }
+            contents: [{
+                role: "user",
+                parts: [{text: userMessage}]
+            }]
+        }),
+    };
 
     // Send POST request to API, get response
     fetch (API_URL, requestOptions).then(res => res.json()).then(data => {
-        messageElement.textContent = data.choices[0].message.content;
+        messageElement.textContent = data.candidates[0].content.parts[0].text;
     }).catch((error) => {
         messageElement.textContent = "Sorry Something went wrong. Please try again.";
-    })
+    }).finally(() => chatlog.scrollTo(0, chatlog.scrollHeight));
 }
 
 const handleChat = () => {
@@ -56,13 +57,13 @@ const handleChat = () => {
     // Clear the input after sending the message
     chatInput.value = "";
 
-    // Display "Let me check..." message while user waiting for response
+    // Display "..." message while user waiting for response
     setTimeout(() => {
-        const incomingChatLi = createChatLi("Let me check...", "incoming")
+        const incomingChatLi = createChatLi("...", "incoming")
         chatlog.appendChild(incomingChatLi);
         chatlog.scrollTo(0, chatlog.scrollHeight);
         generateResponse(incomingChatLi);
-    }, 600);
+    }, 300);
 }
 
 sendChatBtn.addEventListener("click", handleChat);
