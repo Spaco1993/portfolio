@@ -9,7 +9,7 @@ const chatlog = document.querySelector("#chat-log");
 
 
 let userMessage;
-const API_KEY = "AIzaSyDr4B9nKMvyatkq_bgWS9jkP-dnSCv3rIs";
+const API_KEY = "";
 
 
 const createChatLi = (message, className) => {
